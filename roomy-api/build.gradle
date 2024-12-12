@@ -1,0 +1,25 @@
+plugins {
+	id 'java'
+}
+
+group = 'com.cony.roomy.api'
+version = '0.0.1-SNAPSHOT'
+
+java {
+	toolchain {
+		languageVersion = JavaLanguageVersion.of(17)
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation project(':roomy-core')
+
+}
+
+tasks.named('test') {
+	useJUnitPlatform()
+}
