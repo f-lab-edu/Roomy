@@ -1,0 +1,2 @@
+rootProject.name = 'roomy'
+include 'roomy-admin', 'roomy-api', 'roomy-core'
