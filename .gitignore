@@ -35,3 +35,9 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### security ###
+roomy-core/src/main/resources/application-sms.properties
+application-sms.properties
+roomy-core/src/main/resources/application-jwt.properties
+application-jwt.properties
