@@ -1,0 +1,15 @@
+services:
+  mysql:
+    image: mysql:8.0.33
+    ports:
+      - 13306:3306
+#    volumes:
+#      - ${DB_INIT_FILE}:/docker-entrypoint-initdb.d
+    platform: linux/amd64
+    command:
+      - '--character-set-server=utf8mb4'
+      - '--collation-server=utf8mb4_unicode_ci'
+      - '--lower_case_table_names=1'
+    environment:
+      MYSQL_ROOT_PASSWORD: roomy
+      MYSQL_DATABASE: roomy

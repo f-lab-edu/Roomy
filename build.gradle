@@ -38,9 +38,20 @@ subprojects {
 
     dependencies {
         implementation 'org.springframework.boot:spring-boot-starter-web'
+        implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+        implementation 'org.springframework.boot:spring-boot-starter-validation'
+        implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+        implementation 'net.nurigo:sdk:4.3.0'
+        implementation 'org.springframework.security:spring-security-crypto'
+        implementation 'io.jsonwebtoken:jjwt:0.9.1'
+        implementation 'javax.xml.bind:jaxb-api:2.3.1'
+
+        runtimeOnly 'mysql:mysql-connector-java:8.0.33'
         developmentOnly 'org.springframework.boot:spring-boot-devtools'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
+        testImplementation 'org.projectlombok:lombok'
+        testAnnotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.springframework.boot:spring-boot-starter-test'
         testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
     }
