@@ -14,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Map;
 
@@ -41,6 +40,11 @@ public class LoginService {
         if(!passwordEncoder.matches(loginRequest.password(), user.getEncryptPassword())) {
             throw new RoomyException(ErrorType.USER_INVALID_PASSWORD, Map.of("enter password", loginRequest.password()), log::warn);
         }
+
+        return generateToken(user);
+    }
+
+    public TokenResponse generateToken(User user) {
         // 유저 토큰 발급
         String accessToken = tokenProvider.createAccessToken(user);
         String refreshToken = tokenProvider.createRefreshToken(user);

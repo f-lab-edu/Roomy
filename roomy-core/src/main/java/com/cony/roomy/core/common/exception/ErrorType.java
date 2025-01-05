@@ -28,6 +28,9 @@ public enum ErrorType {
     AUTH_RT_TOKEN_INVALID("ROOMY-1103", HttpStatus.FORBIDDEN.value(), "인증 리프레시 토큰이 유효하지 않습니다.", "인증 토큰 오류"),
     AUTH_RT_TOKEN_EXPIRED("ROOMY-1104", HttpStatus.FORBIDDEN.value(), "인증 리프레시 토큰이 만료되었습니다.", "인증 토큰 오류"),
 
+    // OAuth User
+    OAUTH_USER_PARSING_INVALID("ROOMY-1201", HttpStatus.BAD_REQUEST.value(), "외부 유저 정보를 가져오는데에 실패했습니다.", "외부 유저 오류"),
+
     ;
 
     private final String code;

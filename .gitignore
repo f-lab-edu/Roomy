@@ -41,3 +41,5 @@ roomy-core/src/main/resources/application-sms.properties
 application-sms.properties
 roomy-core/src/main/resources/application-jwt.properties
 application-jwt.properties
+roomy-core/src/main/resources/application-oauth.properties
+application-oauth.properties
