@@ -44,7 +44,7 @@ public class GoogleApiClient implements OAuthApiClient {
         body.add("redirect_uri", googleProperties.getRedirectUrl());
 
         HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-
+        // TODO: feign client -> 특징, 변경
         GoogleTokens response = restTemplate.postForObject(url, request, GoogleTokens.class);
         Objects.requireNonNull(response);
 

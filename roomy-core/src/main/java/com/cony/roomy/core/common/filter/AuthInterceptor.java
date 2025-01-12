@@ -41,8 +41,13 @@ public class AuthInterceptor implements HandlerInterceptor {
 
         final String authorization = request.getHeader("Authorization");
         final String accessToken = getBearerToken(authorization);
+        // AT 토큰 유효성 검사
         if(!tokenProvider.isValid(accessToken)) {
             throw new RoomyException(ErrorType.AUTH_AT_TOKEN_INVALID, Map.of("access token", accessToken), log::warn);
+        }
+        // 화이트 리스트에서 AT 토큰 검색
+        if(!tokenProvider.hasWhiteList(accessToken)) {
+            throw new RoomyException(ErrorType.AUTH_AT_TOKEN_NOT_IN_WHITELIST, Map.of("access token", accessToken), log::warn);
         }
 
         final Long userId = tokenProvider.getUserIdByToken(accessToken);

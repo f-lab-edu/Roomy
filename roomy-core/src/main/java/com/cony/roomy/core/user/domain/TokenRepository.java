@@ -13,7 +13,7 @@ import java.time.Duration;
 public class TokenRepository {
 
     private final String REFRESH_PREFIX = "token:refresh:";
-    private final String BLACKLIST_PREFIX = "token:black:";
+    private final String WHITELIST_PREFIX = "token:white:";
 
     private final RedisTemplate<String, String> redisTemplate;
     private final JwtProperties jwtProperties;
@@ -36,14 +36,17 @@ public class TokenRepository {
         redisTemplate.delete(REFRESH_PREFIX + userId);
     }
 
-    public void saveBlackList(String token) {
+    public void saveWhiteList(String token) {
         redisTemplate.opsForValue()
-                .set(BLACKLIST_PREFIX + token, "EXPIRED",
+                .set(WHITELIST_PREFIX + token, "VALID",
                         Duration.ofMillis(TimeUtil.getTimeToLive(jwtProperties.getAccessTokenTTL())));
 
     }
+    public boolean hasWhiteList(String token) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(WHITELIST_PREFIX + token));
+    }
 
-    public boolean hasBlackList(String token) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(BLACKLIST_PREFIX + token));
+    public void deleteWhiteList(String token) {
+        redisTemplate.delete(WHITELIST_PREFIX + token);
     }
 }

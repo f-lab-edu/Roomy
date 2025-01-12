@@ -12,7 +12,7 @@ public class OAuthController {
 
     private final OAuthService oAuthService;
 
-    @GetMapping("/login/oauth/callback/{provider}")
+    @GetMapping("/login/oauth2/callback/{provider}")
     public ApiResponse<TokenResponse> oAuthLogin(@PathVariable String provider, @RequestParam("code") String authorizationCode) {
         TokenResponse tokenResponse = oAuthService.login(provider, authorizationCode);
 

@@ -51,19 +51,18 @@ public class TokenProvider {
 
     public boolean isValid(String token) {
         try {
-            if(tokenRepository.hasBlackList(token)) {
-                return false;
-            }
             Jwts.parser()
                     .setSigningKey(jwtProperties.getSecretKey())
                     .parseClaimsJws(token);
             return true;
         }
-        // TODO: 세부 jwt 처리를 해야할까?
         catch (Exception e) {
-//            e.printStackTrace();
             return false;
         }
+    }
+
+    public boolean hasWhiteList(String accessToken) {
+        return tokenRepository.hasWhiteList(accessToken);
     }
 
     // 토큰으로 유저 PK 가져오기

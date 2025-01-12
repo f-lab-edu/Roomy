@@ -25,6 +25,7 @@ public enum ErrorType {
     // User auth
     AUTH_TOKEN_NOT_BEARER("ROOMY-1101", HttpStatus.UNAUTHORIZED.value(), "인증 토큰을 읽기 위한 헤더가 잘못 되었습니다.", "인증 헤더 오류"),
     AUTH_AT_TOKEN_INVALID("ROOMY-1102", HttpStatus.UNAUTHORIZED.value(), "인증 억세스 토큰이 유효하지 않습니다.", "인증 토큰 오류"),
+    AUTH_AT_TOKEN_NOT_IN_WHITELIST("ROOMY-1102", HttpStatus.UNAUTHORIZED.value(), "인증 억세스 토큰을 화이트 리스트에서 가져오지 못했습니다.", "인증 토큰 오류"),
     AUTH_RT_TOKEN_INVALID("ROOMY-1103", HttpStatus.FORBIDDEN.value(), "인증 리프레시 토큰이 유효하지 않습니다.", "인증 토큰 오류"),
     AUTH_RT_TOKEN_EXPIRED("ROOMY-1104", HttpStatus.FORBIDDEN.value(), "인증 리프레시 토큰이 만료되었습니다.", "인증 토큰 오류"),
 

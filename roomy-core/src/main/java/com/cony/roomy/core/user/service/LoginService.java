@@ -50,6 +50,8 @@ public class LoginService {
         String refreshToken = tokenProvider.createRefreshToken(user);
         // refresh 토큰 저장
         tokenRepository.saveRefreshToken(user.getUserId(), refreshToken);
+        // access token 화이트 리스트에 저장
+        tokenRepository.saveWhiteList(accessToken);
         return TokenResponse.of(accessToken, refreshToken);
     }
 
@@ -74,10 +76,10 @@ public class LoginService {
 
     // 로그아웃
     public void logout(LogoutRequest logoutRequest) {
-        // 1. access token 블랙리스트 삽입
-        tokenRepository.saveBlackList(logoutRequest.accessToken());
+        // 1. AT 토큰 화이트 리스트에서 삭제
+        tokenRepository.deleteWhiteList(logoutRequest.accessToken());
 
-        // 2. 리프레시 토큰 삭제
+        // 2. RT 토큰 레디스에서 삭제
         Long userId = tokenProvider.getUserIdByToken(logoutRequest.accessToken());
         tokenRepository.deleteRefreshToken(userId);
 
