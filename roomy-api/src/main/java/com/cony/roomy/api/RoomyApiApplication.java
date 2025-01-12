@@ -7,7 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
-@EnableFeignClients
+@EnableFeignClients(basePackages = "com.cony.roomy.core")
 @EnableJpaAuditing
 @EntityScan(basePackages = "com.cony.roomy.core")
 @EnableJpaRepositories(basePackages = "com.cony.roomy.core")

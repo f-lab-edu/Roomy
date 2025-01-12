@@ -51,7 +51,7 @@ public class LoginService {
         // refresh 토큰 저장
         tokenRepository.saveRefreshToken(user.getUserId(), refreshToken);
         // access token 화이트 리스트에 저장
-        tokenRepository.saveWhiteList(accessToken);
+        tokenRepository.saveWhiteList(user.getUserId(), accessToken);
         return TokenResponse.of(accessToken, refreshToken);
     }
 
@@ -64,25 +64,31 @@ public class LoginService {
         }
         // 2. user id 유효성 검사
         Long userId = tokenProvider.getUserIdByToken(refreshToken);
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new RoomyException(ErrorType.USER_NOT_FOUND, Map.of("user id", userId), log::warn));
-        // 3. refresh 토큰 저장소에서 확인
+        // 3. RT 토큰 저장소에서 확인
         if(!tokenRepository.hasRefreshToken(userId)) {
             throw new RoomyException(ErrorType.AUTH_RT_TOKEN_EXPIRED, Map.of("refresh token", refreshToken), log::warn);
         }
+        String tokenMatch = tokenRepository.findRefreshToken(userId);
+        if(!tokenMatch.equals(refreshToken)) {
+            throw new RoomyException(ErrorType.AUTH_RT_TOKEN_INVALID, Map.of("refresh token", refreshToken), log::warn);
+        }
+        // 4. 유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RoomyException(ErrorType.USER_NOT_FOUND, Map.of("user id", userId), log::warn));
         String accessToken = tokenProvider.createAccessToken(user);
+        // 5. AT 토큰 화이트 리스트에 저장
+        tokenRepository.saveWhiteList(user.getUserId(), accessToken);
+
         return TokenResponse.reissue(accessToken);
     }
 
     // 로그아웃
     public void logout(LogoutRequest logoutRequest) {
+        final Long userId = tokenProvider.getUserIdByToken(logoutRequest.accessToken());
         // 1. AT 토큰 화이트 리스트에서 삭제
-        tokenRepository.deleteWhiteList(logoutRequest.accessToken());
-
+        tokenRepository.deleteWhiteList(userId);
         // 2. RT 토큰 레디스에서 삭제
-        Long userId = tokenProvider.getUserIdByToken(logoutRequest.accessToken());
         tokenRepository.deleteRefreshToken(userId);
-
     }
 
 }

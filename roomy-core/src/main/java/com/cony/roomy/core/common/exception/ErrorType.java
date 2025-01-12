@@ -8,6 +8,9 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum ErrorType {
 
+    // Unknown
+    UNKNOWN_ERROR("ROOMY-0000", HttpStatus.INTERNAL_SERVER_ERROR.value(), "알 수 없는 에러 발생", "알 수 없는 에러, 잠시 후 다시 시도해주세요."),
+
     // Global or Policy
     INVALID("ROOMY-0001", HttpStatus.BAD_REQUEST.value(), "올바른 값을 입력하지 않았습니다.", "올바른 값을 입력하지 않았습니다."),
     TERM_NOT_FOUND("ROOMY-0002", HttpStatus.NOT_FOUND.value(), "약관 데이터가 누락되었습니다.", "약관 데이터 누락"),
@@ -30,7 +33,10 @@ public enum ErrorType {
     AUTH_RT_TOKEN_EXPIRED("ROOMY-1104", HttpStatus.FORBIDDEN.value(), "인증 리프레시 토큰이 만료되었습니다.", "인증 토큰 오류"),
 
     // OAuth User
-    OAUTH_USER_PARSING_INVALID("ROOMY-1201", HttpStatus.BAD_REQUEST.value(), "외부 유저 정보를 가져오는데에 실패했습니다.", "외부 유저 오류"),
+    OAUTH_UNAUTHORIZED("ROOMY-1201", HttpStatus.UNAUTHORIZED.value(), "OAuth 권한이 없습니다.", "OAuth 요청 실패"),
+    OAUTH_BAD_REQUEST("ROOMY-1202", HttpStatus.BAD_REQUEST.value(), "OAuth 요청이 잘못 되었습니다.", "OAuth 요청 실패"),
+    OAUTH_NOT_FOUND("ROOMY-1203", HttpStatus.NOT_FOUND.value(), "OAuth 요청 경로가 잘못 되었습니다.", "OAuth 요청 실패"),
+    OAUTH_INTERNAL_SERVER_ERROR("ROOMY-1204", HttpStatus.INTERNAL_SERVER_ERROR.value(), "OAuth 요청에 실패했습니다.", "OAuth 요청 실패"),
 
     ;
 

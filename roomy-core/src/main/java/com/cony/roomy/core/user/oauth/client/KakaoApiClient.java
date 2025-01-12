@@ -2,58 +2,44 @@ package com.cony.roomy.core.user.oauth.client;
 
 import com.cony.roomy.core.user.oauth.config.KakaoProperties;
 import com.cony.roomy.core.user.oauth.config.OAuthConstant;
-import com.cony.roomy.core.user.oauth.response.KakaoUserInfo;
 import com.cony.roomy.core.user.oauth.response.OAuthUserInfo;
-import com.cony.roomy.core.user.oauth.tokens.KakaoTokens;
+import com.cony.roomy.core.user.oauth.response.KakaoTokenResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
 
-import java.util.Objects;
+import java.net.URI;
 
 @RequiredArgsConstructor
 @Component
 public class KakaoApiClient implements OAuthApiClient {
 
     private final KakaoProperties kakaoProperties;
-    private final RestTemplate restTemplate;
+    private final KakaoFeignClient kakaoFeignClient;
 
     @Override
-    public String requestAccessToken(String authorizationCode) {
-        String url = kakaoProperties.getAuthUrl() + "/oauth/token";
-
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+    public String getOAuthToken(String authorizationCode) {
+        String url = kakaoProperties.getAuthUrl();
 
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
         body.add("code", authorizationCode);
         body.add("grant_type", OAuthConstant.GRANT_TYPE);
         body.add("client_id", kakaoProperties.getClientId());
+        body.add("redirect_url", kakaoProperties.getRedirectUrl());
 
-        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
+        KakaoTokenResponse kakaoTokenResponse = kakaoFeignClient.getTokens(URI.create(url), body);
 
-        KakaoTokens response = restTemplate.postForObject(url, request, KakaoTokens.class);
-        Objects.requireNonNull(response);
-
-        return response.getAccessToken();
+        return kakaoTokenResponse.getAccessToken();
     }
 
     @Override
-    public OAuthUserInfo requestOAuthUserInfo(String accessToken) {
-        String url = kakaoProperties.getApiUrl() + "/v2/user/me";
+    public OAuthUserInfo getOAuthUserInfo(String accessToken) {
+        String url = kakaoProperties.getApiUrl();
+        String authorizationHeader = "Bearer " + accessToken;
+//        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
+//        body.add("property_keys", "[\"kakao_account.email\", \"kakao_account.profile\"]");
+        return kakaoFeignClient.getUserInfo(URI.create(url), authorizationHeader);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-        httpHeaders.set("Authorization", "Bearer " + accessToken);
-
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        body.add("property_keys", "[\"kakao_account.email\", \"kakao_account.profile\"]");
-
-        HttpEntity<?> request = new HttpEntity<>(body, httpHeaders);
-
-        return restTemplate.postForObject(url, request, KakaoUserInfo.class);
     }
 }

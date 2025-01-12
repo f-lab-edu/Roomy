@@ -45,12 +45,12 @@ public class AuthInterceptor implements HandlerInterceptor {
         if(!tokenProvider.isValid(accessToken)) {
             throw new RoomyException(ErrorType.AUTH_AT_TOKEN_INVALID, Map.of("access token", accessToken), log::warn);
         }
-        // 화이트 리스트에서 AT 토큰 검색
-        if(!tokenProvider.hasWhiteList(accessToken)) {
+        final Long userId = tokenProvider.getUserIdByToken(accessToken);
+        // 화이트 리스트에서 AT 토큰 조회
+        if(!tokenProvider.hasWhiteList(userId, accessToken)) {
             throw new RoomyException(ErrorType.AUTH_AT_TOKEN_NOT_IN_WHITELIST, Map.of("access token", accessToken), log::warn);
         }
 
-        final Long userId = tokenProvider.getUserIdByToken(accessToken);
         // 스프링 시큐리티의 SecurityContextHolder -> Context -> Authentication 과 같은 ThreadLocal context 에 저장
         SecurityContextHolder.setContext(loginService.loadUserById(userId));
         return true;

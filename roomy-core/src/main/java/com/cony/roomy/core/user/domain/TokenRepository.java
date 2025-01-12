@@ -32,21 +32,33 @@ public class TokenRepository {
         return Boolean.TRUE.equals(redisTemplate.hasKey(REFRESH_PREFIX + userId));
     }
 
+    public String findRefreshToken(Long userId) {
+        return redisTemplate.opsForValue().get(REFRESH_PREFIX + userId);
+    }
+
     public void deleteRefreshToken(Long userId) {
         redisTemplate.delete(REFRESH_PREFIX + userId);
     }
 
-    public void saveWhiteList(String token) {
+    public void saveWhiteList(Long userId, String token) {
+        if(hasWhiteList(userId)) {
+            deleteWhiteList(userId);
+        }
         redisTemplate.opsForValue()
-                .set(WHITELIST_PREFIX + token, "VALID",
+                .set(WHITELIST_PREFIX + userId, token,
                         Duration.ofMillis(TimeUtil.getTimeToLive(jwtProperties.getAccessTokenTTL())));
 
     }
-    public boolean hasWhiteList(String token) {
-        return Boolean.TRUE.equals(redisTemplate.hasKey(WHITELIST_PREFIX + token));
+
+    public boolean hasWhiteList(Long userId) {
+        return Boolean.TRUE.equals(redisTemplate.hasKey(WHITELIST_PREFIX + userId));
     }
 
-    public void deleteWhiteList(String token) {
-        redisTemplate.delete(WHITELIST_PREFIX + token);
+    public String findAccessTokenInWhiteList(Long userId) {
+        return redisTemplate.opsForValue().get(WHITELIST_PREFIX + userId);
+    }
+
+    public void deleteWhiteList(Long userId) {
+        redisTemplate.delete(WHITELIST_PREFIX + userId);
     }
 }

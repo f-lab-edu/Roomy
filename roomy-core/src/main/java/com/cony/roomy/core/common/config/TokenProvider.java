@@ -61,8 +61,14 @@ public class TokenProvider {
         }
     }
 
-    public boolean hasWhiteList(String accessToken) {
-        return tokenRepository.hasWhiteList(accessToken);
+    public boolean hasWhiteList(Long userId, String accessToken) {
+        if(!tokenRepository.hasWhiteList(userId)) {
+            return false;
+        }
+        if(!tokenRepository.findAccessTokenInWhiteList(userId).equals(accessToken)) {
+            return false;
+        }
+        return true;
     }
 
     // 토큰으로 유저 PK 가져오기
