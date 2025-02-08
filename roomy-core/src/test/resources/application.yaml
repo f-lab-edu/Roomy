@@ -1,5 +1,5 @@
 server:
-  port: 8081
+  port: 8080
 
 spring:
   config:
@@ -13,8 +13,13 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: update
     properties:
       hibernate:
         format_sql: true
         show_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
