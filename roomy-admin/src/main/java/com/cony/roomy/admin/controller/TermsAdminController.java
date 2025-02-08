@@ -17,10 +17,10 @@ public class TermsAdminController {
 
     private final TermsService termsService;
 
-    // 약관 저장 (admin)
+    // 약관 생성
     @PostMapping("/terms")
-    public ApiResponse<Void> saveTerms(@Valid @RequestBody AddTermsRequest addTermsRequest) {
-        termsService.saveTerms(addTermsRequest);
+    public ApiResponse<Void> createTerm(@Valid @RequestBody AddTermsRequest addTermsRequest) {
+        termsService.createTerm(addTermsRequest);
         return ApiResponse.created("약관 생성 완료");
     }
 
