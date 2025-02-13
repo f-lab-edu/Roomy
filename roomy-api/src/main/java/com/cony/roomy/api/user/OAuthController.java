@@ -1,4 +1,4 @@
-package com.cony.roomy.api.domain.user;
+package com.cony.roomy.api.user;
 
 import com.cony.roomy.core.common.dto.response.ApiResponse;
 import com.cony.roomy.core.user.dto.response.TokenResponse;

@@ -1,4 +1,4 @@
-package com.cony.roomy.api.domain.user;
+package com.cony.roomy.api.user;
 
 import com.cony.roomy.core.user.oauth.OAuthProvider;
 import com.cony.roomy.core.user.oauth.config.OAuthProperties;

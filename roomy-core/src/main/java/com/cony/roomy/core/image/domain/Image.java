@@ -35,11 +35,11 @@ public class Image extends BaseTimeEntity {
     private Room room;
 
     /* 연관관계 편의 메소드 */
-    public void saveAccommodation(Accommodation accommodation) {
+    public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
 
-    public void saveRoom(Room room) {
+    public void setRoom(Room room) {
         this.room = room;
     }
 }

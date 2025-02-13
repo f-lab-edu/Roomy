@@ -38,6 +38,12 @@ public enum ErrorType {
     OAUTH_NOT_FOUND("ROOMY-1203", HttpStatus.NOT_FOUND.value(), "OAuth 요청 경로가 잘못 되었습니다.", "OAuth 요청 실패"),
     OAUTH_INTERNAL_SERVER_ERROR("ROOMY-1204", HttpStatus.INTERNAL_SERVER_ERROR.value(), "OAuth 요청에 실패했습니다.", "OAuth 요청 실패"),
 
+    // Accommodation
+    ACCOMMODATION_NOT_FOUND("ROOMY-3001", HttpStatus.NOT_FOUND.value(), "숙소 정보가 존재하지 않습니다.", "숙소 정보 요청 실패"),
+
+    // Room
+    ROOM_NOT_FOUND("ROOMY-4001", HttpStatus.NOT_FOUND.value(), "객실 정보가 존재하지 않습니다.", "객실 정보 요청 실패")
+
     ;
 
     private final String code;

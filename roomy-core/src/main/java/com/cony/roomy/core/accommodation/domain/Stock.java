@@ -4,7 +4,7 @@ import com.cony.roomy.core.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -23,6 +23,7 @@ public class Stock extends BaseTimeEntity {
 
     private long quantity;
 
-    private LocalDateTime dateTime;
+    @Column(name= "date", unique = true)
+    private LocalDate date;
 
 }

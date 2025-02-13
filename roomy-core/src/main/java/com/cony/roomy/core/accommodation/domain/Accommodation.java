@@ -5,9 +5,11 @@ import com.cony.roomy.core.image.domain.Image;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Formula;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -27,7 +29,11 @@ public class Accommodation extends BaseTimeEntity {
     @Embedded
     private Address address;
 
+//    @Formula("(select coalesce(average(r.rating), 0) from review r where r.accommodation_id = id)")
     private double rating;
+
+    @Formula("(SELECT COALESCE(MIN(r.price), 0) FROM room r WHERE r.accommodation_id = id)")
+    private BigDecimal price;
 
     @Lob
     private String description;
@@ -35,20 +41,20 @@ public class Accommodation extends BaseTimeEntity {
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Image> images = new ArrayList<>();
+    private Set<Image> images = new HashSet<>();
 
     @BatchSize(size = 1000)
     @OneToMany(mappedBy = "accommodation", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Room> rooms = new ArrayList<>();
+    private Set<Room> rooms = new HashSet<>();
 
     /* 연관관계 편의 메소드 */
-    public void saveImages(List<Image> images) {
+    public void saveImages(Set<Image> images) {
         this.images = images;
-        images.forEach(image -> image.saveAccommodation(this));
+        images.forEach(image -> image.setAccommodation(this));
     }
 
-    public void saveRoomsAndImages(List<Room> rooms, List<Image> images) {
+    public void saveRoomsAndImages(Set<Room> rooms, Set<Image> images) {
         saveImages(images);
         this.rooms = rooms;
         rooms.forEach(room -> room.setAccommodation(this));

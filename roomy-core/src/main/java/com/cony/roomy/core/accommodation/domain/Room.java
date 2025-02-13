@@ -4,10 +4,12 @@ import com.cony.roomy.core.common.domain.BaseTimeEntity;
 import com.cony.roomy.core.image.domain.Image;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.BatchSize;
 
+import java.math.BigDecimal;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -22,7 +24,7 @@ public class Room extends BaseTimeEntity {
 
     private String name;
 
-    private int price;
+    private BigDecimal price;
 
     private int maxGuestCnt;
 
@@ -34,21 +36,23 @@ public class Room extends BaseTimeEntity {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Image> images = new ArrayList<>();
+    private Set<Image> images = new HashSet<>();
 
+    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     @Builder.Default
-    private List<Stock> stocks = new ArrayList<>();
+    private Set<Stock> stocks = new HashSet<>();
 
     /* 연관관계 편의 메소드 */
     public void setAccommodation(Accommodation accommodation) {
         this.accommodation = accommodation;
     }
 
-    public void saveImages(List<Image> images) {
+    public void saveImages(Set<Image> images) {
         this.images = images;
-        images.forEach(image -> image.saveRoom(this));
+        images.forEach(image -> image.setRoom(this));
     }
 }
