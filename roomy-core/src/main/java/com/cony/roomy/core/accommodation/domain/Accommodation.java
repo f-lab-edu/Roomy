@@ -33,6 +33,7 @@ public class Accommodation extends BaseTimeEntity {
     private double rating;
 
     @Formula("(SELECT COALESCE(MIN(r.price), 0) FROM room r WHERE r.accommodation_id = id)")
+    @Column(columnDefinition = "decimal(15,2)")
     private BigDecimal price;
 
     @Lob

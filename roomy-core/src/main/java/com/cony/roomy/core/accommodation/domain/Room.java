@@ -32,6 +32,9 @@ public class Room extends BaseTimeEntity {
 
     private LocalTime checkOut;
 
+    // 대실 시 최대 시간
+    private int maxShortStayHours;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
