@@ -7,6 +7,7 @@ import com.cony.roomy.core.accommodation.dto.mapper.AccommodationMapper;
 import com.cony.roomy.core.accommodation.dto.mapper.RoomMapper;
 import com.cony.roomy.core.accommodation.dto.request.AddAccommodationRequest;
 import com.cony.roomy.core.accommodation.dto.response.AccommodationResponse;
+import com.cony.roomy.core.accommodation.querydsl.AccommodationSearchRepository;
 import com.cony.roomy.core.common.exception.ErrorType;
 import com.cony.roomy.core.common.exception.RoomyException;
 import com.cony.roomy.core.image.domain.Image;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 public class AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
+    private final AccommodationSearchRepository accommodationSearchRepository;
     private final AccommodationMapper accommodationMapper;
     private final RoomMapper roomMapper;
     private final ImageMapper imageMapper;
@@ -60,12 +62,15 @@ public class AccommodationService {
     }
 
     public List<AccommodationResponse> getAccommodations(String keyword, LocalDate startDate, LocalDate endDate, int personal) {
-        List<Accommodation> accommodations = accommodationRepository.findAccommodationsByKeyword(keyword, startDate, endDate, personal);
+//        List<Accommodation> accommodations = accommodationRepository.findAccommodationsByKeyword(keyword, startDate, endDate, personal);
+
+        // 전문 검색 인덱스 NGram + QueryDsl 적용한 검색 Repository
+        List<Accommodation> accommodations = accommodationSearchRepository.searchAccommodations(keyword, startDate, endDate, personal);
 
         List<AccommodationResponse> accommodationResponses = accommodations.stream()
                 .map(accommodation -> {
                     AccommodationResponse accommodationResponse = AccommodationResponse.from(accommodation);
-                    // 1. 평균 평점 (rating) -> @Formula 를 통해 자동으로 처리되도록 적용 - 현재 리뷰가 없ㅎ어 주석처리
+                    // 1. 평균 평점 (rating) -> @Formula 를 통해 자동으로 처리되도록 적용 - 현재 리뷰가 없어 주석처리
                     // 2. 객실 최저가 (price) -> @Formula 를 통해 자동으로 처리되도록 적용
                     // 3. 썸네일 이미지
                     String thumbnailUrl = accommodation.getImages().stream()

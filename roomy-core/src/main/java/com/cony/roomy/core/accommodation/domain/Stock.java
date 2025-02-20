@@ -45,6 +45,6 @@ public class Stock extends BaseTimeEntity {
     private LocalTime endTime;
 
     // 예약 가능한 객실 수량
-    private long quantity;
+    private int quantity;
 
 }

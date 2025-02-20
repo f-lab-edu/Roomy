@@ -32,6 +32,9 @@ public class Room extends BaseTimeEntity {
 
     private LocalTime checkOut;
 
+    // 대실이 가능한 방인지 아닌지
+
+
     // 대실 시 최대 시간
     private int maxShortStayHours;
 
@@ -39,7 +42,6 @@ public class Room extends BaseTimeEntity {
     @JoinColumn(name = "accommodation_id")
     private Accommodation accommodation;
 
-    @BatchSize(size = 1000)
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     @Builder.Default
     private Set<Image> images = new HashSet<>();

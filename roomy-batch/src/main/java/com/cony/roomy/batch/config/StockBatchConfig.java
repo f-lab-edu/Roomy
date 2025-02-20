@@ -14,6 +14,7 @@ import org.springframework.batch.item.*;
 import org.springframework.batch.item.database.JpaItemWriter;
 import org.springframework.batch.item.database.JpaPagingItemReader;
 import org.springframework.batch.item.database.builder.JpaPagingItemReaderBuilder;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -27,12 +28,16 @@ import java.util.List;
 @Configuration
 @RequiredArgsConstructor
 public class StockBatchConfig {
+    // 매일 -> 일정 기간 생성하는 방식으로 변경 필요
+    // 트랜잭션 없이 데이터 바로바로 밀어넣기.
+    // 재고 밀어넣다가 실패한 케이스는 따로 모아서 저장하기. -> 멱등성을 고민하면서 코드짜기
 
     private final JobRepository jobRepository;
+    // todo: jdbc
     private final PlatformTransactionManager transactionManager;
     private final EntityManagerFactory entityManagerFactory;
 
-    private final int CHUNK_SIZE = 100;
+    private final int CHUNK_SIZE = 10;
     private final int QUANTITY = 10;
 
     @Bean
@@ -51,7 +56,7 @@ public class StockBatchConfig {
                 .processor(roomToStockProcessor())
                 .writer(stockJpaItemListWriter())
                 .faultTolerant()
-                .retryLimit(5)
+                .retryLimit(3)
                 .retry(Exception.class)
                 .build();
 
@@ -121,6 +126,7 @@ public class StockBatchConfig {
     public JpaItemListWriter<Stock> stockJpaItemListWriter() {
         JpaItemWriter<Stock> jpaItemWriter = new JpaItemWriter<>();
         jpaItemWriter.setEntityManagerFactory(entityManagerFactory);
+        jpaItemWriter.setClearPersistenceContext(true);
 
         return new JpaItemListWriter<>(jpaItemWriter);
     }
