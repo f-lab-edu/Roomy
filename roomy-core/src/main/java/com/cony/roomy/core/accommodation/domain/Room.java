@@ -5,6 +5,8 @@ import com.cony.roomy.core.image.domain.Image;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.LocalTime;
@@ -24,7 +26,9 @@ public class Room extends BaseTimeEntity {
 
     private String name;
 
-    private BigDecimal price;
+    private BigDecimal overNightPrice;
+
+    private BigDecimal shortStayPrice;
 
     private int maxGuestCnt;
 
@@ -32,14 +36,9 @@ public class Room extends BaseTimeEntity {
 
     private LocalTime checkOut;
 
-    // 대실이 가능한 방인지 아닌지
-
-
-    // 대실 시 최대 시간
-    private int maxShortStayHours;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "accommodation_id")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Accommodation accommodation;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)

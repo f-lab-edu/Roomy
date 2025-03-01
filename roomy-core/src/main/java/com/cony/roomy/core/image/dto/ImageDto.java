@@ -14,7 +14,6 @@ public class ImageDto {
 
     private Long id;
     private String name;
-    private long size;
     private ImageType type;
     private String url;
 }

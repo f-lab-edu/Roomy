@@ -32,9 +32,12 @@ public class Accommodation extends BaseTimeEntity {
 //    @Formula("(select coalesce(average(r.rating), 0) from review r where r.accommodation_id = id)")
     private double rating;
 
-    @Formula("(SELECT COALESCE(MIN(r.price), 0) FROM room r WHERE r.accommodation_id = id)")
+    @Formula("(SELECT COALESCE(MIN(r.over_night_price), 0) FROM room r WHERE r.accommodation_id = id)")
     @Column(columnDefinition = "decimal(15,2)")
     private BigDecimal price;
+
+    // 대실 최대 시간
+    private int maxShortStayHours;
 
     @Lob
     private String description;

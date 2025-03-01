@@ -11,11 +11,13 @@ public enum ErrorType {
     // Unknown
     UNKNOWN_ERROR("ROOMY-0000", HttpStatus.INTERNAL_SERVER_ERROR.value(), "알 수 없는 에러 발생", "알 수 없는 에러, 잠시 후 다시 시도해주세요."),
 
-    // Global or Policy
+    // Global
     INVALID("ROOMY-0001", HttpStatus.BAD_REQUEST.value(), "올바른 값을 입력하지 않았습니다.", "올바른 값을 입력하지 않았습니다."),
-    TERM_NOT_FOUND("ROOMY-0002", HttpStatus.NOT_FOUND.value(), "약관 데이터가 누락되었습니다.", "약관 데이터 누락"),
+    BATCH_FAIL("ROOMY-0002", HttpStatus.INTERNAL_SERVER_ERROR.value(), "배치 동작 중 문제가 발생했습니다.", "배치 에러"),
 
-    // User
+
+    // Term & User
+    TERM_NOT_FOUND("ROOMY-1000", HttpStatus.NOT_FOUND.value(), "약관 데이터가 누락되었습니다.", "약관 데이터 누락"),
     USER_NOT_FOUND("ROOMY-1001", HttpStatus.NOT_FOUND.value(), "유저를 찾지 못했습니다.", "유저 조회 실패"),
     USER_ALREADY_EXIST("ROOMY-1002", HttpStatus.BAD_REQUEST.value(), "동일한 정보를 가진 유저가 이미 존재합니다.", "회원가입 실패"),
     USER_EXCEED_RATE_LIMIT("ROOMY-1003", HttpStatus.FORBIDDEN.value(), "10초 후 다시 시도해주세요.", "인증번호 전송 실패"),

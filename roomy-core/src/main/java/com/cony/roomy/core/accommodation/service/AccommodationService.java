@@ -2,6 +2,7 @@ package com.cony.roomy.core.accommodation.service;
 
 import com.cony.roomy.core.accommodation.domain.Accommodation;
 import com.cony.roomy.core.accommodation.domain.AccommodationRepository;
+import com.cony.roomy.core.accommodation.domain.AccommodationType;
 import com.cony.roomy.core.accommodation.domain.Room;
 import com.cony.roomy.core.accommodation.dto.mapper.AccommodationMapper;
 import com.cony.roomy.core.accommodation.dto.mapper.RoomMapper;
@@ -15,6 +16,10 @@ import com.cony.roomy.core.image.domain.ImageType;
 import com.cony.roomy.core.image.dto.ImageMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PagedModel;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -36,6 +41,14 @@ public class AccommodationService {
 
     // 숙소 생성: 어드민 전용
     public void createAccommodation(AddAccommodationRequest addAccommodationRequest) {
+
+        // 숙소 생성 전 최대 대실 시간 고정 생성
+        if(!addAccommodationRequest.getType().equals(AccommodationType.MOTEL)) {
+            addAccommodationRequest.setMaxShortStayHours(0);
+        }
+        else if(addAccommodationRequest.getMaxShortStayHours() == null) {
+            addAccommodationRequest.setMaxShortStayHours(4);
+        }
 
         // 숙소 정보
         Accommodation accommodation = accommodationMapper.toEntity(addAccommodationRequest);
@@ -61,11 +74,10 @@ public class AccommodationService {
         accommodationRepository.save(accommodation);
     }
 
-    public List<AccommodationResponse> getAccommodations(String keyword, LocalDate startDate, LocalDate endDate, int personal) {
-//        List<Accommodation> accommodations = accommodationRepository.findAccommodationsByKeyword(keyword, startDate, endDate, personal);
+    public Page<AccommodationResponse> getAccommodations(String keyword, LocalDate startDate, LocalDate endDate, int personal, Pageable pageable) {
 
         // 전문 검색 인덱스 NGram + QueryDsl 적용한 검색 Repository
-        List<Accommodation> accommodations = accommodationSearchRepository.searchAccommodations(keyword, startDate, endDate, personal);
+        Page<Accommodation> accommodations = accommodationSearchRepository.searchAccommodations(keyword, startDate, endDate, personal, pageable);
 
         List<AccommodationResponse> accommodationResponses = accommodations.stream()
                 .map(accommodation -> {
@@ -86,6 +98,6 @@ public class AccommodationService {
                 })
                 .toList();
 
-        return accommodationResponses;
+        return new PageImpl<>(accommodationResponses);
     }
 }
