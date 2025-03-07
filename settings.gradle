@@ -1,2 +1,5 @@
 rootProject.name = 'roomy'
-include 'roomy-admin', 'roomy-api', 'roomy-core'
+include 'roomy-batch'
+include 'roomy-admin'
+include 'roomy-api'
+include 'roomy-core'

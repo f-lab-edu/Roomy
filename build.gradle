@@ -59,7 +59,7 @@ subprojects {
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
 
         runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-        developmentOnly 'org.springframework.boot:spring-boot-devtools'
+//        developmentOnly 'org.springframework.boot:spring-boot-devtools'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.projectlombok:lombok'
@@ -85,6 +85,15 @@ project(':roomy-api') {
 project(':roomy-admin') {
     jar {
         archivesBaseName = 'roomy-admin'
+    }
+    dependencies {
+        compileOnly project(':roomy-core')
+    }
+}
+
+project(':roomy-batch') {
+    jar {
+        archivesBaseName = 'roomy-batch'
     }
     dependencies {
         compileOnly project(':roomy-core')

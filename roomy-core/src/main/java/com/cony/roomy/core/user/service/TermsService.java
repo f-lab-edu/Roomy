@@ -5,7 +5,6 @@ import com.cony.roomy.core.common.exception.RoomyException;
 import com.cony.roomy.core.user.domain.Term;
 import com.cony.roomy.core.user.domain.TermId;
 import com.cony.roomy.core.user.dto.TermIdDto;
-import com.cony.roomy.core.user.dto.TermVersion;
 import com.cony.roomy.core.user.dto.request.AddTermsRequest;
 import com.cony.roomy.core.user.dto.response.MainTermResponse;
 import com.cony.roomy.core.user.domain.TermRepository;
@@ -26,8 +25,8 @@ public class TermsService {
 
     private final TermRepository termRepository;
 
-    // 약관 삽입 (테스트 용)
-    public void saveTerms(AddTermsRequest addTermsRequest) {
+    // 약관 삽입: 어드민 전용
+    public void createTerm(AddTermsRequest addTermsRequest) {
         TermId termId = addTermsRequest.toTermId();
         Term term = addTermsRequest.toEntity(termId);
 

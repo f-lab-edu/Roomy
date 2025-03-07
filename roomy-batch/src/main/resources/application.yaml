@@ -1,0 +1,23 @@
+server:
+  port: 8082
+
+spring:
+  config:
+    activate:
+      on-profile: dev
+  datasource:
+    url: jdbc:mysql://localhost:13306/roomy?serverTimezone=UTC&characterEncoding=UTF-8&rewriteBatchedStatements=true
+    username: roomy
+    password: backend
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+
+  batch:
+    job:
+      enabled: true
+    jdbc:
+      initialize-schema: always
