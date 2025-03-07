@@ -1,18 +1,24 @@
-package com.cony.roomy.core.accommodation.domain;
+package com.cony.roomy.core.reservation.domain;
 
+import com.cony.roomy.core.accommodation.domain.Room;
 import com.cony.roomy.core.common.domain.BaseTimeEntity;
+import com.cony.roomy.core.common.exception.ErrorType;
+import com.cony.roomy.core.common.exception.RoomyException;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Map;
 
+@Slf4j
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @AllArgsConstructor
 @Table(
         uniqueConstraints = {
@@ -49,5 +55,13 @@ public class Stock extends BaseTimeEntity {
 
     // 예약 가능한 객실 수량
     private int quantity;
+
+    /* 편의 메소드 */
+    public void decreaseQuantity(int count) {
+        if (this.quantity < count) {
+            throw new RoomyException(ErrorType.STOCK_NOT_ENOUGH , Map.of("quantity", quantity, "decrease", count), log::error);
+        }
+        this.quantity -= count;
+    }
 
 }

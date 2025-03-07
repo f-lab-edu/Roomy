@@ -1,6 +1,6 @@
 package com.cony.roomy.batch.dto;
 
-import com.cony.roomy.core.accommodation.domain.UsageType;
+import com.cony.roomy.core.reservation.domain.UsageType;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

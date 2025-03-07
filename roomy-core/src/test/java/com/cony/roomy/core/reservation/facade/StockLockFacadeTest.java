@@ -1,0 +1,87 @@
+package com.cony.roomy.core.reservation.facade;
+
+import com.cony.roomy.core.accommodation.domain.Room;
+import com.cony.roomy.core.accommodation.domain.RoomRepository;
+import com.cony.roomy.core.reservation.domain.Stock;
+import com.cony.roomy.core.reservation.domain.StockRepository;
+import com.cony.roomy.core.reservation.domain.UsageType;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@ActiveProfiles("dev")
+class StockLockFacadeTest {
+
+    @Autowired
+    private StockLockFacade stockLockFacade;
+
+    @Autowired
+    private StockRepository stockRepository;
+
+    @Autowired
+    private RoomRepository roomRepository;
+
+    // 테스트 데이터
+    private final Long testRoomId = 3L;
+    private final LocalDate testDate = LocalDate.of(2025, 1, 1);
+    private final int initialStock = 100;
+
+    public Stock testStock;
+
+    @BeforeEach
+    public void setUp() {
+        Room room = roomRepository.findById(testRoomId).get();
+        testStock = stockRepository.save(
+                Stock.builder()
+                        .room(room)
+                        .date(testDate)
+                        .usageType(UsageType.OVERNIGHT)
+                        .startTime(LocalTime.now())
+                        .endTime(LocalTime.now())
+                        .quantity(initialStock)
+                        .build()
+        );
+    }
+
+    @AfterEach
+    public void after() {
+        stockRepository.delete(testStock);
+    }
+
+    @Test
+    void 동시_예약_재고_감소_테스트() throws InterruptedException {
+        int threadCount = 100; // 동시 요청 수
+        ExecutorService executorService = Executors.newFixedThreadPool(32);
+        CountDownLatch latch = new CountDownLatch(threadCount);
+
+        for (int i = 0; i < threadCount; i++) {
+            executorService.submit(() -> {
+                try {
+                    stockLockFacade.decreaseStockWithLock(testRoomId, testDate, UsageType.OVERNIGHT);
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        latch.await();
+        executorService.shutdown();
+
+        assertThat(stockRepository.findByRoomIdAndDateAndUsageType(testRoomId, testDate, UsageType.OVERNIGHT).get().getQuantity()).isEqualTo(0);
+    }
+
+}

@@ -31,6 +31,10 @@ public class ApiResponse<T> extends CommonResponse {
         return of(HttpStatus.CREATED.value(), message, null);
     }
 
+    public static <T> ApiResponse<T> created(String message, T data) {
+        return of(HttpStatus.CREATED.value(), message, data);
+    }
+
     public static <T> ApiResponse<T> noContent() {
         return of(HttpStatus.NO_CONTENT.value(), HttpStatus.NO_CONTENT.name(), null);
     }
