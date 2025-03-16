@@ -19,6 +19,10 @@ public class ApiResponse<T> extends CommonResponse {
         return new ApiResponse<>(code, message, data);
     }
 
+    public static <T> ApiResponse<T> ok(String message) {
+        return of(HttpStatus.OK.value(), message, null);
+    }
+
     public static <T> ApiResponse<T> ok(T data) {
         return of(HttpStatus.OK.value(), HttpStatus.OK.name(), data);
     }
@@ -29,6 +33,10 @@ public class ApiResponse<T> extends CommonResponse {
 
     public static <T> ApiResponse<T> created(String message) {
         return of(HttpStatus.CREATED.value(), message, null);
+    }
+
+    public static <T> ApiResponse<T> created(String message, T data) {
+        return of(HttpStatus.CREATED.value(), message, data);
     }
 
     public static <T> ApiResponse<T> noContent() {

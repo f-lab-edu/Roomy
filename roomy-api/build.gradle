@@ -3,11 +3,16 @@ plugins {
 }
 
 group = 'com.cony.roomy.api'
-version = '0.0.1-SNAPSHOT'
+version = '0.0.1'
 
 dependencies {
 	implementation project(':roomy-core')
 
+}
+
+bootJar {
+	archiveBaseName.set("roomy-api")
+	archiveVersion.set("")
 }
 
 tasks.named('test') {

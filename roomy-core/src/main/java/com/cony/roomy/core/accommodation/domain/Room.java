@@ -2,6 +2,7 @@ package com.cony.roomy.core.accommodation.domain;
 
 import com.cony.roomy.core.common.domain.BaseTimeEntity;
 import com.cony.roomy.core.image.domain.Image;
+import com.cony.roomy.core.reservation.domain.Stock;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.BatchSize;

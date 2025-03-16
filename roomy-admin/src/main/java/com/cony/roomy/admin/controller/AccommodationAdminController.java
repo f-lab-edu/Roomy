@@ -2,7 +2,7 @@ package com.cony.roomy.admin.controller;
 
 import com.cony.roomy.core.accommodation.dto.request.AddAccommodationRequest;
 import com.cony.roomy.core.accommodation.service.AccommodationService;
-import com.cony.roomy.core.accommodation.service.StockService;
+import com.cony.roomy.core.reservation.service.StockService;
 import com.cony.roomy.core.common.dto.response.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

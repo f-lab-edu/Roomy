@@ -3,7 +3,7 @@ package com.cony.roomy.core.accommodation.querydsl;
 import com.cony.roomy.core.accommodation.domain.Accommodation;
 import com.cony.roomy.core.accommodation.domain.QAccommodation;
 import com.cony.roomy.core.accommodation.domain.QRoom;
-import com.cony.roomy.core.accommodation.domain.QStock;
+import com.cony.roomy.core.reservation.domain.QStock;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;

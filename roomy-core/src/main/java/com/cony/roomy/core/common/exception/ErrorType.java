@@ -14,6 +14,7 @@ public enum ErrorType {
     // Global
     INVALID("ROOMY-0001", HttpStatus.BAD_REQUEST.value(), "올바른 값을 입력하지 않았습니다.", "올바른 값을 입력하지 않았습니다."),
     BATCH_FAIL("ROOMY-0002", HttpStatus.INTERNAL_SERVER_ERROR.value(), "배치 동작 중 문제가 발생했습니다.", "배치 에러"),
+    REDISSON_LOCK_FAIL("ROOMY-0003", HttpStatus.INTERNAL_SERVER_ERROR.value(), "레디스 분산락 처리 중 문제가 발생했습니다.", "레디스 락 에러"),
 
 
     // Term & User
@@ -44,7 +45,13 @@ public enum ErrorType {
     ACCOMMODATION_NOT_FOUND("ROOMY-3001", HttpStatus.NOT_FOUND.value(), "숙소 정보가 존재하지 않습니다.", "숙소 정보 요청 실패"),
 
     // Room
-    ROOM_NOT_FOUND("ROOMY-4001", HttpStatus.NOT_FOUND.value(), "객실 정보가 존재하지 않습니다.", "객실 정보 요청 실패")
+    ROOM_NOT_FOUND("ROOMY-4001", HttpStatus.NOT_FOUND.value(), "객실 정보가 존재하지 않습니다.", "객실 정보 요청 실패"),
+
+    // Stock & Reservation & Payment
+    STOCK_NOT_FOUND("ROOMY-5001", HttpStatus.NOT_FOUND.value(), "객실 재고가 없습니다.", "객실 재고 요청 실패"),
+    OUT_OF_STOCK("ROOMY-5002", HttpStatus.BAD_REQUEST.value(), "객실 재고가 충분하지 않습니다.", "객실 재고 부족"),
+    RESERVATION_NOT_FOUND("ROOMY-5003", HttpStatus.NOT_FOUND.value(), "예약 정보가 존재하지 않습니다.", "예약 정보 조회 실패"),
+    PAYMENT_NOT_FOUND("ROOMY-5004", HttpStatus.NOT_FOUND.value(), "결제 정보가 존재하지 않습니다.", "결제 정보 조회 실패")
 
     ;
 

@@ -1,4 +1,4 @@
-package com.cony.roomy.core.common.config;
+package com.cony.roomy.core.common.config.property;
 
 import jakarta.annotation.PostConstruct;
 import lombok.Getter;
