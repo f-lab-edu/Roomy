@@ -58,9 +58,6 @@ public class Stock extends BaseTimeEntity {
 
     /* 편의 메소드 */
     public void decreaseQuantity(int count) {
-        if (this.quantity < count) {
-            throw new RoomyException(ErrorType.STOCK_NOT_ENOUGH , Map.of("quantity", quantity, "decrease", count), log::error);
-        }
         this.quantity -= count;
     }
 

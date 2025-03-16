@@ -1,6 +1,6 @@
 package com.cony.roomy.core.common.util;
 
-import com.cony.roomy.core.common.config.SmsProperties;
+import com.cony.roomy.core.common.config.property.SmsProperties;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;

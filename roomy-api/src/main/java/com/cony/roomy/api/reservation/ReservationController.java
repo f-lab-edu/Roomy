@@ -16,9 +16,9 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    @PostMapping("/overnight")
+    @PostMapping
     public ApiResponse<ReservationResponse> reserveOvernight(@RequestBody ReservationRequest request) {
-        ReservationResponse reservationResponse = reservationService.reserveRoom(request, UsageType.OVERNIGHT);
+        ReservationResponse reservationResponse = reservationService.reserveRoom(request);
         return ApiResponse.created("예약이 확정되었습니다.", reservationResponse);
     }
 
@@ -26,5 +26,11 @@ public class ReservationController {
     @GetMapping("/{reservationNo}")
     public ApiResponse<ReservationResponse> getReservationByNo(@PathVariable String reservationNo) {
         return ApiResponse.ok(reservationService.getReservationByNo(reservationNo));
+    }
+
+    @PutMapping("/cancel/{reservationNo}")
+    public ApiResponse<Void> cancelReservation(@PathVariable String reservationNo) {
+        reservationService.cancel(reservationNo);
+        return ApiResponse.ok("예약이 취소되었습니다.");
     }
 }

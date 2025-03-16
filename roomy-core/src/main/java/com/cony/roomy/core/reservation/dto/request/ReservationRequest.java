@@ -1,9 +1,6 @@
 package com.cony.roomy.core.reservation.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -11,7 +8,11 @@ import java.time.LocalDate;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ReservationRequest {
+
+    private Long paymentId;
+    private Long reservationId;
     private Long roomId;
     private Long userId;
     private String guestName;
@@ -20,4 +21,17 @@ public class ReservationRequest {
     private int guestCount;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    public static ReservationRequest of(PaymentRequest paymentRequest) {
+        return ReservationRequest.builder()
+                .roomId(paymentRequest.getRoomId())
+                .userId(paymentRequest.getUserId())
+                .guestName(paymentRequest.getGuestName())
+                .guestPhone(paymentRequest.getGuestPhone())
+                .guestComment(paymentRequest.getGuestComment())
+                .guestCount(paymentRequest.getGuestCount())
+                .startDate(paymentRequest.getStartDate())
+                .endDate(paymentRequest.getEndDate())
+                .build();
+    }
 }

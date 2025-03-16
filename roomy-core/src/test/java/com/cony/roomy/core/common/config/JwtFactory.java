@@ -1,5 +1,6 @@
 package com.cony.roomy.core.common.config;
 
+import com.cony.roomy.core.common.config.property.JwtProperties;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,5 +1,6 @@
 package com.cony.roomy.core.common.config;
 
+import com.cony.roomy.core.common.config.property.JwtProperties;
 import com.cony.roomy.core.common.util.TimeUtil;
 import com.cony.roomy.core.user.domain.TokenRepository;
 import com.cony.roomy.core.user.domain.User;

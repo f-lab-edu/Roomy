@@ -6,10 +6,11 @@ import com.cony.roomy.core.reservation.domain.Stock;
 import com.cony.roomy.core.reservation.domain.StockRepository;
 import com.cony.roomy.core.common.exception.ErrorType;
 import com.cony.roomy.core.common.exception.RoomyException;
-import com.cony.roomy.core.reservation.domain.UsageType;
+import com.cony.roomy.core.reservation.dto.request.StockRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
@@ -36,13 +37,19 @@ public class StockService {
         stockRepository.save(stock);
     }
 
-    @Transactional
-    public void decrease(Long roomId, LocalDate date, UsageType usageType) {
-        Stock stock = stockRepository.findByRoomIdAndDateAndUsageType(roomId, date, usageType)
-                .orElseThrow(() -> new RoomyException(ErrorType.STOCK_NOT_FOUND, Map.of("roomId", roomId, "date", date), log::warn));
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void decrease(StockRequest request) throws RoomyException {
+        for(LocalDate date = request.getStartDate(); date.isBefore(request.getEndDate()); date = date.plusDays(1)) {
+            LocalDate finalDate = date;
+            Stock stock = stockRepository.findByRoomIdAndDateAndUsageType(request.getRoomId(), date, request.getUsageType())
+                    .orElseThrow(() -> new RoomyException(ErrorType.STOCK_NOT_FOUND, Map.of("roomId", request.getRoomId(), "date", finalDate), log::error));
+            if (stock.getQuantity() < 1) {
+                throw new RoomyException(ErrorType.OUT_OF_STOCK, Map.of("quantity", stock.getQuantity(), "decrease", 1), log::error);
+            }
+            stock.decreaseQuantity(1);
+            stockRepository.save(stock);
 
-        stock.decreaseQuantity(1);
-        stockRepository.save(stock);
+        }
     }
 
 }

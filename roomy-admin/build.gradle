@@ -3,18 +3,16 @@ plugins {
 }
 
 group = 'com.cony.roomy.admin'
-version = '0.0.1-SNAPSHOT'
-
-repositories {
-    mavenCentral()
-}
-
-bootJar.enabled = true
-jar.enabled = false
+version = '0.0.1'
 
 dependencies {
     implementation project(':roomy-core')
 
+}
+
+bootJar {
+    archiveBaseName.set("roomy-admin")
+    archiveVersion.set("")
 }
 
 tasks.named('test') {

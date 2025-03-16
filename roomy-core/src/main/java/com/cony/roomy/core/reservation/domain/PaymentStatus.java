@@ -1,7 +1,7 @@
 package com.cony.roomy.core.reservation.domain;
 
-public enum ReservationStatus {
+public enum PaymentStatus {
     PENDING,
-    CONFIRMED,
-    CANCELLED,
+    COMPLETED,
+    FAILED
 }

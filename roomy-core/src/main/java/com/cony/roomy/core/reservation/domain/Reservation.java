@@ -3,19 +3,18 @@ package com.cony.roomy.core.reservation.domain;
 import com.cony.roomy.core.accommodation.domain.Room;
 import com.cony.roomy.core.common.domain.BaseTimeEntity;
 import com.cony.roomy.core.reservation.dto.request.ReservationRequest;
-import com.cony.roomy.core.reservation.generator.NoGenerator;
-import com.cony.roomy.core.user.domain.User;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Builder
-public class Reservation {
+public class Reservation extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -47,18 +46,30 @@ public class Reservation {
     @Enumerated(EnumType.STRING)
     private ReservationStatus status;
 
-    public static Reservation create(Long userId, Room room, ReservationRequest request, NoGenerator noGenerator) {
+    public static Reservation of(ReservationRequest reservationRequest, Room room) {
         return Reservation.builder()
-                .reservationNo(noGenerator.generate())
-                .userId(userId)
+                .reservationNo(generateReservationNo())
+                .userId(reservationRequest.getUserId())
                 .room(room)
-                .startDate(request.getStartDate())
-                .endDate(request.getEndDate())
-                .guestCount(request.getGuestCount())
-                .guestName(request.getGuestName())
-                .guestPhone(request.getGuestPhone())
-                .guestComment(request.getGuestComment())
+                .startDate(reservationRequest.getStartDate())
+                .endDate(reservationRequest.getEndDate())
+                .guestCount(reservationRequest.getGuestCount())
+                .guestName(reservationRequest.getGuestName())
+                .guestPhone(reservationRequest.getGuestPhone())
+                .guestComment(reservationRequest.getGuestComment())
                 .status(ReservationStatus.CONFIRMED)
                 .build();
+    }
+
+    private static String generateReservationNo() {
+        String random = UUID.randomUUID().toString();
+        random = random.replaceAll("-", "");
+        random = random.substring(0, 16);
+
+        return random;
+    }
+
+    public void cancel() {
+        this.status = ReservationStatus.CANCELLED;
     }
 }

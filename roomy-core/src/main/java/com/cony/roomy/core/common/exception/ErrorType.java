@@ -47,10 +47,11 @@ public enum ErrorType {
     // Room
     ROOM_NOT_FOUND("ROOMY-4001", HttpStatus.NOT_FOUND.value(), "객실 정보가 존재하지 않습니다.", "객실 정보 요청 실패"),
 
-    // Stock & Reservation
+    // Stock & Reservation & Payment
     STOCK_NOT_FOUND("ROOMY-5001", HttpStatus.NOT_FOUND.value(), "객실 재고가 없습니다.", "객실 재고 요청 실패"),
-    STOCK_NOT_ENOUGH("ROOMY-5002", HttpStatus.BAD_REQUEST.value(), "객실 재고가 충분하지 않습니다.", "객실 재고 부족"),
-    RESERVATION_NOT_FOUND("ROOMY-5003", HttpStatus.NOT_FOUND.value(), "예약번호가 존재하지 않습니다.", "예약 조회 실패")
+    OUT_OF_STOCK("ROOMY-5002", HttpStatus.BAD_REQUEST.value(), "객실 재고가 충분하지 않습니다.", "객실 재고 부족"),
+    RESERVATION_NOT_FOUND("ROOMY-5003", HttpStatus.NOT_FOUND.value(), "예약 정보가 존재하지 않습니다.", "예약 정보 조회 실패"),
+    PAYMENT_NOT_FOUND("ROOMY-5004", HttpStatus.NOT_FOUND.value(), "결제 정보가 존재하지 않습니다.", "결제 정보 조회 실패")
 
     ;
 

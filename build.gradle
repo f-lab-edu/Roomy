@@ -14,6 +14,10 @@ java {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
@@ -58,9 +62,9 @@ subprojects {
         implementation 'javax.xml.bind:jaxb-api:2.3.1'
         implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
         implementation 'org.redisson:redisson-spring-boot-starter:3.42.0'
+        implementation 'org.springframework.kafka:spring-kafka'
 
         runtimeOnly 'mysql:mysql-connector-java:8.0.33'
-//        developmentOnly 'org.springframework.boot:spring-boot-devtools'
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
         testImplementation 'org.projectlombok:lombok'
@@ -104,4 +108,14 @@ project(':roomy-batch') {
 project(':roomy-core') {
     bootJar { enabled = false }
     jar { enabled = true }
+}
+
+// 루트 프로젝트에서는 중복된 실행 가능한 JAR 파일을 생성하는 것을 방지
+tasks.named('bootJar') {
+    enabled = false
+}
+
+// 각 모듈의 라이브러리 JAR 파일을 생성하기 위해 킴
+tasks.named('jar') {
+    enabled = true
 }

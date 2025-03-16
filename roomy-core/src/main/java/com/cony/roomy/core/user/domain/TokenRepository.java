@@ -1,6 +1,6 @@
 package com.cony.roomy.core.user.domain;
 
-import com.cony.roomy.core.common.config.JwtProperties;
+import com.cony.roomy.core.common.config.property.JwtProperties;
 import com.cony.roomy.core.common.util.TimeUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;

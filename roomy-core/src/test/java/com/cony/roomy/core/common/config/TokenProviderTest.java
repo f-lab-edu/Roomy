@@ -1,5 +1,6 @@
 package com.cony.roomy.core.common.config;
 
+import com.cony.roomy.core.common.config.property.JwtProperties;
 import com.cony.roomy.core.user.domain.User;
 import com.cony.roomy.core.user.domain.UserRepository;
 import io.jsonwebtoken.Jwts;

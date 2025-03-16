@@ -2,18 +2,15 @@ server:
   port: 8082
 
 spring:
-  config:
-    activate:
-      on-profile: dev
   datasource:
-    url: jdbc:mysql://localhost:13306/roomy?serverTimezone=UTC&characterEncoding=UTF-8&rewriteBatchedStatements=true
+    url: jdbc:mysql://172.18.0.2:13306/roomy?serverTimezone=UTC&characterEncoding=UTF-8&rewriteBatchedStatements=true
     username: roomy
     password: backend
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
 
   batch:
