@@ -1,0 +1,20 @@
+name: CD Pipeline
+
+on:
+  workflow_run:
+    workflows: ["CI Pipeline"]
+    branches:
+      - chore/5-cicd
+    types:
+      - completed
+
+jobs:
+  deploy:
+    name: Trigger Lambda Deployment
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Call Lambda through API Gateway
+        run: |
+          curl -X POST ${{ secrets.LAMBDA_API_URL }} \
+            -H "Content-Type: application/json" 
