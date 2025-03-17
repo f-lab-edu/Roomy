@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  roomy-api:
+    image: namgonkim/roomy:latest
+    container_name: roomy-api
+    restart: always
+    environment:
+      - APP_NAME=roomy-api
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/roomy?serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=roomy
+      - SPRING_DATASOURCE_PASSWORD=roomy
+      - SPRING_REDIS_HOST=redis
+      - SPRING_REDIS_PORT=6379
+    ports:
+      - "8081:8081"
+    networks:
+      - roomy-network
+
+  roomy-admin:
+    image: namgonkim/roomy:latest
+    container_name: roomy-admin
+    restart: always
+    environment:
+      - APP_NAME=roomy-admin
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/roomy?serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=roomy
+      - SPRING_DATASOURCE_PASSWORD=roomy
+    ports:
+      - "8082:8082"
+    networks:
+      - roomy-network
+
+  roomy-batch:
+    image: namgonkim/roomy:latest
+    container_name: roomy-batch
+    restart: always
+    environment:
+      - APP_NAME=roomy-batch
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysql:3306/roomy?serverTimezone=UTC
+      - SPRING_DATASOURCE_USERNAME=roomy
+      - SPRING_DATASOURCE_PASSWORD=roomy
+    ports:
+      - "8082:8082"
+    networks:
+      - roomy-network
+
+  redis:
+    image: redis:7.2
+    container_name: redis
+    restart: always
+    ports:
+      - "6379:6379"
+    networks:
+      - roomy-network
+
+networks:
+  roomy-network:
+    driver: bridge
